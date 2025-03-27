@@ -6,7 +6,7 @@
 
 ## データ更新
 
-* 日曜の0痔に、 `yen_cot.html` ファイルが更新されます。
+* 日曜の0時に、 `yen_cot.html` ファイルが更新されます。
 * `yen_cot.html` を download raw file してもらえれば、手元でhtmlで参照できるかと思います。
 
 ## データの出所と算出方法
