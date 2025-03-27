@@ -1,6 +1,8 @@
 name: weekly update
 
 on:
+  schedule:
+    - cron: '0 0 * * 0' # 毎週日曜日の0時0分に実行
   workflow_dispatch: # 手動で実行するためのトリガー
 
 jobs:
