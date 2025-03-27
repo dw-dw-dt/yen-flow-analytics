@@ -1,1 +1,23 @@
+name: weekly update
 
+on:
+  schedule:
+    - cron: '0 0 * * 7' # 毎週日曜日の0時0分に実行
+  workflow_dispatch: # 手動で実行するためのトリガー
+
+jobs:
+  numpy-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
+          architecture: 'x64'
+      - name: Create .venv
+        run: uv sync
+      - name: Activate .venv
+        run: source .venv/bin/activate
+      - name: Run Python
+        run: python main.py
