@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 
 
-# 2直近までのデータを取得
+# 直近までのデータを取得
 years = range(2017, dt.datetime.now().year + 1)
 reports = [cot.cot_year(year=year) for year in years] # このやり方だと2003年以前と2007年がなぜが取得できない
 reports.append(cot.cot_hist(cot_report_type = "legacy_fut")) # 1986年から2016年までのデータを取得
