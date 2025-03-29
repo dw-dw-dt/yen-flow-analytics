@@ -1,7 +1,11 @@
 # IMM(International Monetary Market) Currency Futures Positions
 
 このリポジトリは、IMM通貨先物ポジションのデータを提供することを目的としています。  
-現時点では開発初期のため、細部に誤りが含まれる可能性があります。予めご了承ください。
+現時点では開発初期のため、細部に誤りが含まれる可能性があります。予めご了承ください。  
+
+## ホスティング先
+
+* https://dw-dw-dt.github.io/yen-flow-analytics/yen_cot.html
 
 ## データ更新について
 
@@ -17,6 +21,10 @@
 # English version
 This repository provides data on IMM currency futures positions.   
 Please note that the repositoty is still in its early stages, so there may be minor inaccuracies.
+
+## Hosting
+
+* https://dw-dw-dt.github.io/yen-flow-analytics/yen_cot.html
 
 ## Data Updates
 
