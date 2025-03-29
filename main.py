@@ -47,4 +47,4 @@ fig = px.line(
     }
 )
 # fig.show()
-fig.write_html("yen_cot.html")
+fig.write_html("html/yen_cot.html")

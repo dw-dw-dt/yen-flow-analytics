@@ -5,8 +5,8 @@
 
 ## データ更新について
 
-* 更新タイミング: 毎週日曜日の0時に  `yen_cot.html` ファイルが更新されます。
-* ファイルの利用方法: `yen_cot.html` を「Download Raw File」からダウンロードすることで、ローカル環境でHTMLファイルとして閲覧できます。
+* 更新タイミング: 毎週日曜日の0時に  `html/yen_cot.html` ファイルが更新されます。
+* ファイルの利用方法: `html/yen_cot.html` を「Download Raw File」からダウンロードすることで、ローカル環境でHTMLファイルとして閲覧できます。
 
 ## データの出所と算出方法
 
@@ -20,8 +20,8 @@ Please note that the repositoty is still in its early stages, so there may be mi
 
 ## Data Updates
 
-* Update Schedule: The `yen_cot.html` file is updated every Sunday at 0:00.
-* Usage: Download the raw file (`yen_cot.html`) to view it locally as an HTML file.
+* Update Schedule: The `html/yen_cot.html` file is updated every Sunday at 0:00.
+* Usage: Download the raw file (`html/yen_cot.html`) to view it locally as an HTML file.
 
 ## Data Source and Calculation Method
 
