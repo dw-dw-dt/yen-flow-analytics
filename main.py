@@ -46,5 +46,14 @@ fig = px.line(
         "Net Noncommercial Positions": "Net Noncommercial Positions"
     }
 )
+# x軸に範囲スライダーを追加する設定
+fig.update_layout(
+    xaxis=dict(
+        rangeslider=dict(
+            visible=True  # 範囲スライダーを表示
+        ),
+        type="date"  # 日付型の場合、"date"を指定
+    )
+)
 # fig.show()
 fig.write_html("docs/yen_cot.html")
