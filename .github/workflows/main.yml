@@ -23,7 +23,7 @@ jobs:
         run: uv sync
 
       - name: Run Python
-        run: uv run main.py
+        run: uv run yen_flow.py
       
       - name: Commit and push changes
         run: |
