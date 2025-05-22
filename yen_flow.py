@@ -3,61 +3,56 @@ import datetime as dt
 import pandas as pd
 import plotly.express as px
 
+# 定数
+DATE_COL = "As of Date in Form YYYY-MM-DD"
+YEN_MARKET = "JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE"
+OUTPUT_HTML = "docs/yen_cot.html"
 
-def main():
-    # 直近までのデータを取得
-    years = range(2017, dt.datetime.now().year + 1)
-    reports = [cot.cot_year(year=year) for year in years] # このやり方だと2003年以前と2007年がなぜが取得できないので、2017年以降をひとまず取得
-    reports.append(cot.cot_hist(cot_report_type = "legacy_fut")) # 1986年から2016年までのデータはこちらのメソッドで取得
 
-    # 各年のデータを縦に連結
+def fetch_cot_data(start_year=2017):
+    """COTデータを1986年から現在まで取得し連結する"""
+    years = range(start_year, dt.datetime.now().year + 1)
+    reports = [cot.cot_year(year=year) for year in years]
+    reports.append(cot.cot_hist(cot_report_type="legacy_fut"))
     report = pd.concat(reports, ignore_index=True)
+    report[DATE_COL] = pd.to_datetime(report[DATE_COL])
+    return report
 
-    # 日付カラム名を指定し、日付型に変換
-    date_col = "As of Date in Form YYYY-MM-DD"
-    report[date_col] = pd.to_datetime(report[date_col])
 
-    # Japanese Yenのみ抽出
-    yen_report = report[report['Market and Exchange Names']=='JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE']
-    # report[report['Market and Exchange Names'].str.contains('JAPANESE YEN')]['Market and Exchange Names'].unique()
-    # によると、以下の通り他にもいくつかある
-    # array(['JAPANESE YEN - CHICAGO MERCANTILE EXCHANGE',
-    #        'EURO FX/JAPANESE YEN XRATE - CHICAGO MERCANTILE EXCHANGE',
-    #        'JAPANESE YEN - INTERNATIONAL MONETARY MARKET',
-    #        'U.S. DOLLARS-JAPANESE YEN - NEW YORK FUTURES EXCHANGE',
-    #        'JAPANESE YEN - PHILADELPHIA BOARD OF TRADE',
-    #        'EURO FX/JAPANESE YEN XRATE - NEW YORK BOARD OF TRADE',
-    #        'EURO FX/JAPANESE YEN XRATE - NEW YORK COTTON EXCHANGE'],
-    #       dtype=object)
+def extract_yen_positions(report):
+    """日本円のIMMデータのみ抽出し、必要なカラムとNet計算を行う"""
+    yen_report = report[report['Market and Exchange Names'] == YEN_MARKET]
+    yen_df = yen_report.sort_values(DATE_COL, ascending=True).reset_index(drop=True)[
+        [DATE_COL, 'Noncommercial Positions-Long (All)', 'Noncommercial Positions-Short (All)']
+    ]
+    yen_df['Net Noncommercial Positions'] = (
+        yen_df['Noncommercial Positions-Long (All)'] - yen_df['Noncommercial Positions-Short (All)']
+    )
+    return yen_df
 
-    # 整形
-    yen_df = yen_report.sort_values(date_col, ascending=True).reset_index(drop=True)[[date_col, 'Noncommercial Positions-Long (All)', 'Noncommercial Positions-Short (All)']]
 
-    # Netの非商業ポジションを計算
-    yen_df['Net Noncommercial Positions'] = yen_df['Noncommercial Positions-Long (All)'] - yen_df['Noncommercial Positions-Short (All)']
-
-    # Plotly Express でラインチャートを作成
+def plot_yen_positions(yen_df, output_path=OUTPUT_HTML):
+    """Net非商業ポジションの推移をプロットしHTML出力"""
     fig = px.line(
-        yen_df, 
-        x="As of Date in Form YYYY-MM-DD", 
+        yen_df,
+        x=DATE_COL,
         y="Net Noncommercial Positions",
         title="Net Noncommercial Yen Positions Over Time; IMM(International Monetary Market) Data",
-        labels={
-            "As of Date in Form YYYY-MM-DD": "Date",
-            "Net Noncommercial Positions": "Net Noncommercial Positions"
-        }
+        labels={DATE_COL: "Date", "Net Noncommercial Positions": "Net Noncommercial Positions"}
     )
-    # x軸に範囲スライダーを追加する設定
     fig.update_layout(
         xaxis=dict(
-            rangeslider=dict(
-                visible=True  # 範囲スライダーを表示
-            ),
-            type="date"  # 日付型の場合、"date"を指定
+            rangeslider=dict(visible=True),
+            type="date"
         )
     )
-    # fig.show()
-    fig.write_html("docs/yen_cot.html")
+    fig.write_html(output_path)
+
+
+def main():
+    report = fetch_cot_data()
+    yen_df = extract_yen_positions(report)
+    plot_yen_positions(yen_df)
 
 
 if __name__ == "__main__":
